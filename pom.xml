@@ -21,7 +21,9 @@
         <onnxruntime.version>1.16.3</onnxruntime.version>
         <pdfbox.version>2.0.30</pdfbox.version>
         <commons-io.version>2.16.1</commons-io.version>
-        <log4j.version>2.17.1</log4j.version>
+        <hutool-core.version>5.8.33</hutool-core.version>
+        <slf4j.version>2.0.16</slf4j.version>
+        <log4j.version>2.24.2</log4j.version>
         <junit.version>4.13.1</junit.version>
         <maven-jar-plugin.version>3.4.0</maven-jar-plugin.version>
     </properties>
@@ -46,6 +48,12 @@
         </dependency>
 
         <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>${hutool-core.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
@@ -59,7 +67,7 @@
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
             <version>${log4j.version}</version>
         </dependency>
 

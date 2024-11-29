@@ -31,26 +31,18 @@ import static com.xu.layout.utils.Utils.generateUUID;
 @SuppressWarnings("unused")
 public class LayoutExtractor {
 
-    private final ImageUploader imageUploader;
-
-    private final boolean drawPredictions;
-
     private final String drawPredictionsOutputDir;
 
     private final ModelDetection modelDetection;
 
-    public LayoutExtractor(ImageUploader imageUploader, boolean drawPredictions, String drawPredictionsOutputDir) {
-        this.imageUploader = imageUploader;
-        this.drawPredictions = drawPredictions;
+    public LayoutExtractor(String drawPredictionsOutputDir) {
         this.drawPredictionsOutputDir = drawPredictionsOutputDir;
         String modelPath = "yolov8n_layout_general6.onnx";
         String labelPath = "labels.names";
         modelDetection = buildModelDetection(modelPath, labelPath);
     }
 
-    public LayoutExtractor(ImageUploader imageUploader, boolean drawPredictions, String drawPredictionsOutputDir, String modelPath, String labelPath) {
-        this.imageUploader = imageUploader;
-        this.drawPredictions = drawPredictions;
+    public LayoutExtractor(String drawPredictionsOutputDir, String modelPath, String labelPath) {
         this.drawPredictionsOutputDir = drawPredictionsOutputDir;
         modelDetection = buildModelDetection(modelPath, labelPath);
     }
@@ -94,9 +86,7 @@ public class LayoutExtractor {
             List<RegionBlock> sortRegionBlocks = LayoutParser.processLayout(regionBlocks);
             String content = sortRegionBlocks.stream().map(RegionBlock::getSimpleContent).collect(Collectors.joining("\n"));
             // 在图像上绘制检测结果并保存
-            if (drawPredictions) {
-                drawPredictionsPage(img, pageIndex, detections);
-            }
+            drawPredictionsPage(img, pageIndex, sortRegionBlocks);
             return content;
         } catch (IOException e) {
             log.error("detectPage错误， pageIndex: {}", pageIndex, e);
@@ -156,7 +146,7 @@ public class LayoutExtractor {
             content = String.format("<img src=\"%s\" /> \n", uploadImage(rect, img, pageIndex));
         }
         // 将提取到的内容添加到标签内容列表中
-        return new RegionBlock(label, content, detection.getBbox(), detection.getConfidence());
+        return new RegionBlock(label, detection.getLabelIndex(), content, detection.getBbox(), detection.getConfidence());
     }
 
     /**
@@ -191,7 +181,8 @@ public class LayoutExtractor {
         try {
             ImageIO.write(subImage, "png", baos);
             byte[] imageData = baos.toByteArray();
-            return imageUploader.upload(new ByteArrayInputStream(imageData), generateUUID() + "_figure.png", imageData.length);
+            FigureResolver figureResolver = new DefaultFigureResolver();
+            return figureResolver.resolve(new ByteArrayInputStream(imageData), generateUUID() + "_figure.png", imageData.length);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -200,8 +191,8 @@ public class LayoutExtractor {
     /**
      * 下载检测过的文档页图片，方便对比
      */
-    private void drawPredictionsPage(BufferedImage img, int pageIndex, List<Detection> detections) {
-        ImageUtil.drawPredictions(img, detections);
+    private void drawPredictionsPage(BufferedImage img, int pageIndex, List<RegionBlock> regionBlocks) {
+        ImageUtil.drawPredictions(img, regionBlocks);
         Path path = Paths.get(drawPredictionsOutputDir, pageIndex + "---" + generateUUID() + "_detected.png");
         if (path.isAbsolute()) {
             try {

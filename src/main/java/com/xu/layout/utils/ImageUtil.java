@@ -1,6 +1,7 @@
 package com.xu.layout.utils;
 
 import com.xu.layout.core.Detection;
+import com.xu.layout.entity.RegionBlock;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -25,11 +26,13 @@ public class ImageUtil {
         return chw;
     }
 
-    public static void drawPredictions(BufferedImage image, List<Detection> detectionList) {
+    public static void drawPredictions(BufferedImage image, List<RegionBlock> regionBlocks) {
         Graphics2D g2d = image.createGraphics();
-        for (Detection detection : detectionList) {
-            float[] bbox = detection.getBbox();
-            Color color = getColorForLabel(detection.getLabelIndex());
+
+        for (int i = 0; i < regionBlocks.size(); i++) {
+            RegionBlock regionBlock = regionBlocks.get(i);
+            float[] bbox = regionBlock.getBbox();
+            Color color = getColorForLabel(regionBlock.getLabelIndex());
 
             // 绘制矩形框
             g2d.setColor(color);
@@ -39,7 +42,7 @@ public class ImageUtil {
 
             // 绘制标签文字
             g2d.setFont(new Font("Arial", Font.PLAIN, 12));
-            g2d.drawString(detection.getLabel() + "-" + detection.getConfidence(),
+            g2d.drawString(regionBlock.getLabel() + "--" + i + "--" + regionBlock.getConfidence(),
                     (int) bbox[0] - 1, (int) bbox[1] - 5);
         }
         g2d.dispose();

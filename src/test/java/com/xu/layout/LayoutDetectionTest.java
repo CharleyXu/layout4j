@@ -1,6 +1,6 @@
 package com.xu.layout;
 
-import com.xu.layout.core.DefaultImageUploader;
+import cn.hutool.core.io.resource.ResourceUtil;
 import com.xu.layout.core.LayoutExtractor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -20,26 +20,11 @@ public class LayoutDetectionTest {
         // 石油报.pdf
         // Attention Is All You Need.pdf
         // 研报.pdf
-        String resourceName = "石油报.pdf";
-        DefaultImageUploader defaultImageUploader = new DefaultImageUploader();
         String savePath = Paths.get("").toAbsolutePath() + "/img";
-        LayoutExtractor pdfLayoutDetection = new LayoutExtractor(defaultImageUploader, true, savePath);
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)) {
+        LayoutExtractor pdfLayoutDetection = new LayoutExtractor(savePath);
+        try (InputStream inputStream = ResourceUtil.getStream("石油报.pdf")) {
             String text = pdfLayoutDetection.detectionPdf(inputStream);
             log.info("text: {}", text);
-        }
-    }
-
-    public static void main(String[] args) {
-        String resourceName = "石油报.pdf";
-        DefaultImageUploader defaultImageUploader = new DefaultImageUploader();
-        String savePath = Paths.get("").toAbsolutePath() + "/img";
-        LayoutExtractor pdfLayoutDetection = new LayoutExtractor(defaultImageUploader, true, savePath);
-        try (InputStream inputStream = LayoutDetectionTest.class.getClassLoader().getResourceAsStream(resourceName)) {
-            String text = pdfLayoutDetection.detectionPdf(inputStream);
-            log.info("text: {}", text);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

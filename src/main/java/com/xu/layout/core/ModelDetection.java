@@ -1,6 +1,7 @@
 package com.xu.layout.core;
 
 import ai.onnxruntime.*;
+import cn.hutool.core.io.resource.ResourceUtil;
 import com.xu.layout.utils.ImageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -63,7 +64,8 @@ public class ModelDetection {
         } else {
             sessionOptions.addCPU(true);
         }
-        this.session = this.env.createSession(modelPath, sessionOptions);
+        byte[] bytes = ResourceUtil.readBytes(modelPath);
+        this.session = this.env.createSession(bytes, sessionOptions);
 
         Map<String, NodeInfo> inputMetaMap = this.session.getInputInfo();
         this.inputName = this.session.getInputNames().iterator().next();
@@ -77,7 +79,7 @@ public class ModelDetection {
     }
 
     private void initializeLabel(String labelPath) {
-        try (InputStream resourceAsStream = this.getClass().getResourceAsStream(labelPath)) {
+        try (InputStream resourceAsStream = this.getClass().getResourceAsStream("/" + labelPath)) {
             if (Objects.nonNull(resourceAsStream)) {
                 labelNames = IOUtils.readLines(resourceAsStream, StandardCharsets.UTF_8);
             }

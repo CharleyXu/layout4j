@@ -15,14 +15,16 @@ public class RegionBlock {
     // [x1, y1, x2, y2]
     public String label;
 
-    public String content;
+    private int labelIndex;
 
-    public String getSimpleContent() {
-        return content.replace("\n", "").replace("\r", "");
-    }
+    public String content;
 
     public float[] bbox;
 
     public float confidence;
+
+    public String getSimpleContent() {
+        return content.replace("\n", "").replace("\r", "");
+    }
 
 }
