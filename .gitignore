@@ -12,6 +12,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.DS_Store
 
 ### IntelliJ IDEA ###
 .idea
@@ -19,8 +20,6 @@ target/
 *.iml
 *.ipr
 *.png
-
-.DS_Store
 
 ### NetBeans ###
 /nbproject/private/
