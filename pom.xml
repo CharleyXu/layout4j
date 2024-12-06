@@ -19,6 +19,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <onnxruntime.version>1.16.3</onnxruntime.version>
+        <opencv.version>4.9.0-0</opencv.version>
         <pdfbox.version>2.0.30</pdfbox.version>
         <commons-io.version>2.16.1</commons-io.version>
         <hutool-core.version>5.8.33</hutool-core.version>
@@ -33,6 +34,12 @@
             <groupId>com.microsoft.onnxruntime</groupId>
             <artifactId>onnxruntime</artifactId>
             <version>${onnxruntime.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
         </dependency>
 
         <dependency>

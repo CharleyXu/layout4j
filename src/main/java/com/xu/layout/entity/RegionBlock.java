@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author xuzc
+ * <p>
+ * 区域块
  */
 @Data
 @NoArgsConstructor
