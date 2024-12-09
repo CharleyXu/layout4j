@@ -1,35 +1,31 @@
-# layout4j
+# Layout4j
+[![CN doc](https://img.shields.io/badge/文档-中文版-blue.svg)](README_zh_CN.md)
+## Layout Analysis
+1. Utilize ONNX models to analyze the layout of PDF documents or images, identifying a collection of layout regions.
 
-## 版面分析
+2. Employ the model yolov8n_layout_general6.
 
-1. 使用onnx模型来对PDF文档或者图片进行版面分析，得到区域块集合
+3. Supported categories: ["Text", "Title", "Figure", "Table", "Caption", "Equation"].
 
-2. 使用模型 yolov8n_layout_general6
+## Region Sorting
+Sort the layout regions according to human reading order to extract structured text content.
 
-3. 支持类别，["Text", "Title", "Figure", "Table", "Caption", "Equation"]
+## Implementation Approach
+The sorting algorithm, based on the positions of text blocks, identifies and organizes the hierarchical relationships between different regions (e.g., titles, text). By efficiently sorting and filtering the regions, the algorithm can recognize associations between columns, titles, and text in complex document layouts, ultimately generating a structured layout tree.
 
-## 区域块排序
+## Core Features
+1. Remove small overlapping regions.
+2. Sort text blocks by Y-coordinate, prioritizing vertical layouts.
+3. Build a multi-level layout structure containing text blocks based on title recognition.
+4. Handle multi-column layouts by classifying text blocks into columns.
+5. Process and store regions (e.g., titles, text blocks) along with their hierarchical relationships.
 
-对区域块，按人类阅读顺序排序后，得到文本内容。
-
-### 实现思路
-
-基于文本块位置的排序算法，能够识别并组织不同区域块（如标题、文本等）之间的层级关系。通过对区域块的有效排序与过滤，可以在复杂的文档布局中识别列、标题与文本的关联关系，最终生成一个结构化的布局树。
-
-### 核心功能
-
-1. 移除重叠的小区域块
-2. 按 Y 坐标排序文本块，优先考虑垂直布局
-3. 基于标题识别，构建包含文本块的多层次布局
-4. 处理多列布局，将文本块按照列进行分类
-5. 处理和存储区域块（如标题、文本块等）及其层级关系
-
-## 参考项目
-
+## Reference Projects
+ 
 - [RapidLayout](https://github.com/RapidAI/RapidLayout)
 
-汇集了全网开源的版面分析模型
+A collection of open-source layout analysis models.
 
 - [GapTree_Sort_Algorithm](https://github.com/hiroi-sora/GapTree_Sort_Algorithm)
 
-这个仅适用于标准横排或标准竖排阅读习惯，无法处理报刊等非标准布局的文档
+This algorithm is suitable only for standard horizontal or vertical reading formats and cannot handle non-standard layouts such as newspapers.
