@@ -20,9 +20,10 @@ public class LayoutDetectionTest {
         // 石油报.pdf
         // Attention Is All You Need.pdf
         // 研报.pdf
+        // 三季度报.pdf
         String savePath = Paths.get("").toAbsolutePath() + "/img";
         LayoutExtractor pdfLayoutDetection = new LayoutExtractor(savePath);
-        try (InputStream inputStream = ResourceUtil.getStream("石油报.pdf")) {
+        try (InputStream inputStream = ResourceUtil.getStream("研报.pdf")) {
             String text = pdfLayoutDetection.detectionPdf(inputStream);
             log.info("text: {}", text);
         }
