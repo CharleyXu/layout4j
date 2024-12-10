@@ -13,6 +13,24 @@ import java.util.Map;
  */
 public class TitleBlockProcessor {
 
+    public static List<RegionBlock> processAndTraverse(Map<Integer, List<RegionBlock>> columnMap) {
+        return processAndTraverse(columnMap, null);
+    }
+
+    public static List<RegionBlock> processAndTraverse(Map<Integer, List<RegionBlock>> columnMap, RegionBlock parent) {
+        int columns = columnMap.size();
+        LayoutNode root = new LayoutNode(parent);
+        for (int col = 0; col < columns; col++) {
+            List<RegionBlock> columnTexts = columnMap.get(col);
+            LayoutNode columnNode = new LayoutNode(null);
+            for (RegionBlock text : columnTexts) {
+                columnNode.children.add(new LayoutNode(text));
+            }
+            root.children.add(columnNode);
+        }
+        return root.preorderTraverse();
+    }
+
     public static boolean isUnderTitle(RegionBlock title, RegionBlock text, List<RegionBlock> latterTitles) {
         float[] titleBbox = title.getBbox();
         float[] textBbox = text.getBbox();
@@ -38,26 +56,6 @@ public class TitleBlockProcessor {
             }
         }
         return true;
-    }
-
-    public static List<RegionBlock> processAndTraverse(List<RegionBlock> texts) {
-        return processAndTraverse(texts, null);
-    }
-
-    public static List<RegionBlock> processAndTraverse(List<RegionBlock> texts, RegionBlock parent) {
-        int columns = ColumnDetector.detectColumns(texts);
-        Map<Integer, List<RegionBlock>> columnMap = ColumnDetector.distributeToColumns(texts, columns);
-
-        LayoutNode root = new LayoutNode(parent);
-        for (int col = 0; col < columns; col++) {
-            List<RegionBlock> columnTexts = columnMap.get(col);
-            LayoutNode columnNode = new LayoutNode(null);
-            for (RegionBlock text : columnTexts) {
-                columnNode.children.add(new LayoutNode(text));
-            }
-            root.children.add(columnNode);
-        }
-        return root.preorderTraverse();
     }
 
     private static boolean horizontalOverlap(float[] titleBbox, float[] textBbox) {
